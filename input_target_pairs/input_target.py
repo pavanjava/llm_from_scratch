@@ -12,7 +12,7 @@ def get_data():
 def encode(text: str):
     return tokenizer.encode(text=text)
 
- 
+
 text_ = get_data()
 encoding = encode(text=text_)
 
