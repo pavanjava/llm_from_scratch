@@ -46,8 +46,9 @@ if __name__ == '__main__':
     with open('../the-verdict.txt', 'r') as f:
         text = f.read()
 
-    dataloader = create_dataloader(text=text, batch_size=2, max_context_length=4, stride=4, shuffle=False)
+    dataloader = create_dataloader(text=text, batch_size=10, max_context_length=4, stride=4,
+                                   shuffle=False, num_workers=2)
 
-    data_iter = iter(dataloader)
-    first_batch = next(data_iter)
-    print(first_batch)
+    # data_iter = iter(dataloader)
+    # first_batch = next(data_iter)
+    # print(first_batch)
