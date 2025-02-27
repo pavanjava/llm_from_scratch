@@ -10,3 +10,9 @@ dimension_size = 4
 
 torch.manual_seed(42)
 embedding_layer = torch.nn.Embedding(num_embeddings=vocab_size, embedding_dim=dimension_size)
+
+print(embedding_layer.weight)
+
+print(embedding_layer(torch.tensor([3])))
+
+print(embedding_layer(torch.tensor([3, 6, 4, 1])))
