@@ -7,3 +7,5 @@ this repository will have the code base and slight explanation of building llm f
 - Chapter 3: 
 - Chapter 4:
 - Chapter 5
+
+# Details on chapters
