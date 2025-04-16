@@ -1,3 +1,5 @@
 tiktoken
 torch
 transformers[torch]
+numpy
+matplotlib
