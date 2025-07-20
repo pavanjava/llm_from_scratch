@@ -2,8 +2,8 @@ import torch
 import asyncio
 
 
-async def compute_attention_scores(inputs: torch.tensor, debug: bool = False):
-    attn_scores = torch.empty(inputs.shape[0])
+async def compute_attention_scores_for_single_query(inputs: torch.tensor, debug: bool = False):
+    attn_scores = torch.empty(inputs.shape)
     query = inputs[1]
     for i, x_i in enumerate(inputs):
        attn_scores[i] = torch.dot(x_i, query) # dot product to compute the similarity of the words
@@ -11,9 +11,12 @@ async def compute_attention_scores(inputs: torch.tensor, debug: bool = False):
         print(f"Raw Attention scores: {attn_scores}")
     return attn_scores
 
+async def compute_attention_scores_for_whole_inputs(inputs: torch.tensor):
+    return inputs @ inputs.T
+
 async def compute_attention_weights(attention_scores: torch.tensor, debug: bool = False):
     # standard torch implementation of softmax
-    attn_weights = torch.softmax(attention_scores, dim=0)
+    attn_weights = torch.softmax(attention_scores, dim=-1)
     if debug:
         print(f"std.softmax normalised attention (attention weights): {attn_weights}")
     return attn_weights
@@ -39,7 +42,8 @@ async def main():
         ]
     )
 
-    attention_scores = await compute_attention_scores(inputs=inputs)
+    # attention_scores = await compute_attention_scores_for_single_query(inputs=inputs)
+    attention_scores = await compute_attention_scores_for_whole_inputs(inputs=inputs)
     attention_weights = await compute_attention_weights(attention_scores=attention_scores)
 
     print(f"attention scores: {attention_scores}")
