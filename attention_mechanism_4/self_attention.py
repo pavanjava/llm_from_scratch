@@ -79,4 +79,3 @@ if __name__ == '__main__':
     self_attention = SelfAttention(_inputs=inputs, debug=False)
     context_vectors = self_attention.forward()
     logger.info(f"Context Vectors: {context_vectors}")
-
