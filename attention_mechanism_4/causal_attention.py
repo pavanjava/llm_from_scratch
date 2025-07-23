@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 
-class SelfAttention(torch.nn.Module):
+class CausalAttention(torch.nn.Module):
     def __init__(self, _inputs: torch.tensor, debug: bool = False):
         super().__init__()
         self.inputs = _inputs
@@ -59,11 +59,19 @@ class SelfAttention(torch.nn.Module):
             logger.info(f'attention_weights shape: {self.attention_weights.shape}')
             logger.info(f'attention_weights: {self.attention_weights}')
 
+        # Keep only lower triangle and diagonal, zero out upper triangle
+        self.attention_weights = self.attention_weights * torch.tril(torch.ones_like(self.attention_weights))
+
+        if self.debug:
+            logger.info(f'attention_weights shape: {self.attention_weights.shape}')
+            logger.info(f'attention_weights: {self.attention_weights}')
+
+
     def _compute_context_vectors(self) -> torch.tensor:
         _context_vectors = self.attention_weights @ self.v
         if self.debug:
-            logger.info(f'context_vectors shape: {self.context_vectors.shape}')
-            logger.info(f'context_vectors: {self.context_vectors}')
+            logger.info(f'context_vectors shape: {_context_vectors.shape}')
+            logger.info(f'context_vectors: {_context_vectors}')
         return _context_vectors
 
 
@@ -76,6 +84,6 @@ if __name__ == '__main__':
          [0.77, 0.25, 0.10],  # one      (x^5)
          [0.05, 0.80, 0.55]]  # step     (x^6)
     )
-    self_attention = SelfAttention(_inputs=inputs, debug=False)
-    cntxt_vectors = self_attention.forward()
+    causal_attention = CausalAttention(_inputs=inputs, debug=True)
+    cntxt_vectors = causal_attention.forward()
     logger.info(f"Context Vectors: {cntxt_vectors}")
